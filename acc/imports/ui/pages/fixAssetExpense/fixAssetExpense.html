@@ -1,0 +1,23 @@
+<template name="acc_fixAssetExpense">
+    <div class="animated fadeIn">
+        <p>
+            <button type="button" class="btn btn-primary depreciationExpense">{{fa "plus"}}  Expense</button>
+        </p>
+
+        {{> tabular table=Acc.TabularTable.FixAssetExpense selector=selector class="table table-striped table-bordered table-condensed table-hover"}}
+    </div>
+</template>
+
+<template name="acc_fixAssetExpenseAction">
+    <button class="btn btn-danger remove"><a href="#">{{fa "remove"}}</a></button>
+</template>
+
+<template name="acc_fixAssetExpenseInsert">
+    {{#autoForm collection=Acc.Collection.FixAssetExpense id="acc_fixAssetExpenseInsert"  type="insert"}}
+    <div class="row">
+        {{> afQuickField name='date' id='date'}}
+    </div>
+    <button type="submit" class="btn btn-primary">{{fa "floppy-o"}} Save</button>
+    <button type="reset" class="btn btn-default">{{fa "refresh"}} Reset</button>
+{{/autoForm}}
+</template>

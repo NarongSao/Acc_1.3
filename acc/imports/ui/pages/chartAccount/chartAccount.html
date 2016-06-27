@@ -1,0 +1,73 @@
+<!--Index-->
+<template name="acc_chartAccount">
+    <div class="animated fadeIn">
+        <p>
+            <button type="button" class="btn btn-primary insert">{{fa "plus"}} Add New</button>
+        </p>
+
+        {{> tabular table=tabularTable class="table table-striped table-bordered table-condensed table-hover"}}
+        <!--{{> reactiveTable settings=tableSettings}}-->
+    </div>
+</template>
+<!--Action-->
+<template name="acc_chartAccountAction">
+    {{#columnAction align="left"}}
+        <li><a href="#" class="update">{{fa "pencil"}} Update</a></li>
+        <li><a href="#" class="remove">{{fa "remove"}} Remove</a></li>
+        <li><a href="#" class="show">{{fa "eye"}} Show</a></li>
+    {{/columnAction}}
+</template>
+
+<!--Insert-->
+<template name="acc_chartAccountInsert">
+    {{#autoForm collection=collection id="acc_chartAccountInsert" type="insert"}}
+        <div class="row">
+
+            {{> afQuickField name='parentId' id='parentId'}}
+            {{> afQuickField name='accountTypeId' id='accountTypeId' options=accountTypeOpt value=accountTypeValue}}
+
+
+            {{> afQuickField name='code' id='code'}}
+            {{> afQuickField name='name'}}
+
+        </div>
+
+        <button type="submit" class="btn btn-primary preventDef">{{fa "floppy-o"}} Save</button>
+        <button type="reset" class="btn btn-default">{{fa "refresh"}} Reset</button>
+    {{/autoForm}}
+</template>
+<!--Update-->
+<template name="acc_chartAccountUpdate">
+
+    {{#autoForm collection=collection id="acc_chartAccountUpdate" doc=this type="update"}}
+        <div class="row">
+
+            {{> afQuickField name='parentId' id='parentId'}}
+            {{> afQuickField name='accountTypeId' id='accountTypeId' options=accountTypeOpt  }}
+
+            {{> afQuickField name='code' id='code'}}
+            {{> afQuickField name='name'}}
+
+        </div>
+
+        <button type="submit" class="btn btn-primary preventDef">{{fa "floppy-o"}} Save</button>
+        <button type="reset" class="btn btn-default">{{fa "refresh"}} Reset</button>
+    {{/autoForm}}
+
+</template>
+
+<!--Show-->
+<template name="acc_chartAccountShow">
+    <dl class="dl-horizontal">
+        <dt>Id</dt>
+        <dd>{{_id}}</dd>
+        <dt>Code</dt>
+        <dd>{{code}}</dd>
+        <dt>Name</dt>
+        <dd>{{name}}</dd>
+        <dt>Parent</dt>
+        <dd>{{parentId}}</dd>
+        <dt>Account Type</dt>
+        <dd>{{accountTypeId}}</dd>
+    </dl>
+</template>

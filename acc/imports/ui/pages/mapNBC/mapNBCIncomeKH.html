@@ -1,0 +1,44 @@
+<!--Index-->
+<template name="acc_mapNBCIncomeKH">
+    <div class="animated fadeIn">
+
+        {{> tabular table=Acc.TabularTable.MapNBCIncomeKH class="table table-striped table-bordered table-condensed table-hover"}}
+    </div>
+</template>
+
+<template name="acc_mapNBCIncomeKHAction">
+    <a href="#" class="btn btn-primary update"> {{fa "pencil"}}</a>
+</template>
+
+<!--Insert-->
+<template name="acc_mapNBCIncomeKHInsert">
+    {{#autoForm collection=Acc.Collection.MapNBCIncomeKH id="acc_mapNBCIncomeKHInsert" type="insert"}}
+        <div class="row">
+            {{> afQuickField name='chartAccountNBCId'}}
+            <div class="col-md-12">
+                {{> acc_chartAccountDetail}}
+            </div>
+
+        </div>
+        <button type="submit" class="btn btn-primary preventDef">{{fa "floppy-o"}} Save</button>
+        <button type="reset" class="btn btn-default">{{fa "refresh"}} Reset</button>
+    {{/autoForm}}
+</template>
+<!--Update-->
+<template name="acc_mapNBCIncomeKHUpdate">
+
+    {{#autoForm collection=Acc.Collection.MapNBCIncomeKH id="acc_mapNBCIncomeKHUpdate" doc=this type="update"}}
+        <div class="row">
+            {{> afQuickField name='chartAccountNBCId' type="hidden"}}
+            <label>NBC Account</label>
+            <input type="text" class="form-control" readonly value="{{name}}">
+            <div class="col-md-12">
+                {{> acc_chartAccountDetail}}
+            </div>
+
+        </div>
+        <button type="submit" class="btn btn-primary preventDef">{{fa "floppy-o"}} Save</button>
+        <button type="reset" class="btn btn-default">{{fa "refresh"}} Reset</button>
+    {{/autoForm}}
+
+</template>

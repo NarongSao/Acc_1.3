@@ -1,0 +1,179 @@
+<template name="acc_FixAsset">
+    <div class="animated bounceInDown">
+        <div class="row">
+            <div class="col-sm-3" style="padding-right:1px;padding-left:0px;">
+                <b>Fixed Asset</b>
+            </div>
+            <div class="col-sm-9" style="padding-right:1px;padding-left:0px;">
+                <div class="col-sm-3" style="padding-right:1px;padding-left:0px;">
+                    <b>Item Description</b>
+                </div>
+                <div class="col-sm-2" style="padding-right:1px;padding-left:0px;">
+                    <b>Code</b>
+                </div>
+                <div class="col-sm-2" style="padding-right:1px;padding-left:0px;">
+                    <b>Value</b>
+                </div>
+                <div class="col-sm-1" style="padding-right:1px;padding-left:0px;">
+                    <b>Life</b>
+                </div>
+                <div class="col-sm-2" style="padding-right:1px;padding-left:0px;">
+                    <b>Est Sal</b>
+                </div>
+                <div class="col-sm-1" style="padding-right:1px;padding-left:0px;">
+                    <b>Percent</b>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-3" style="padding-right:1px;padding-left:0px;">
+                <div class="form-group">
+                    <select id="tmpAccount" class="tmpAccount" name="tmpAccount" style="width: 100%;">
+                        {{#each chartAccount}}
+                            <option value="{{code}} | {{name}}">{{code}} | {{name}}</option>
+                        {{/each}}
+                    </select>
+                </div>
+            </div>
+            <div class="col-sm-9" style="padding-right:1px;padding-left:0px;">
+                <div class="col-sm-3" style="padding-right:1px;padding-left:0px;">
+                    <div class="form-group">
+                        <input type="text" step="1" name="tmpItemDes" class="form-control tmpItemDes"
+                               placeholder="Description">
+                    </div>
+                </div>
+                <div class="col-sm-2" style="padding-right:1px;padding-left:0px;">
+                    <div class="form-group">
+                        <input type="text" step="1" name="tmpCode" class="form-control tmpCode"
+                               placeholder="Code">
+                    </div>
+                </div>
+                <div class="col-sm-2" style="padding-right:1px;padding-left:0px;">
+                    <div class="form-group">
+                        <input type="text" step="1" name="tmpValue" class="form-control tmpValue"
+                               placeholder="Value">
+                    </div>
+                </div>
+
+
+                <div class="col-sm-1" style="padding-right:1px;padding-left:0px;">
+                    <div class="form-group">
+                        <input type="text" step="0.01" name="tmpLife" class="form-control tmpLife"
+                               placeholder="Life">
+                    </div>
+                </div>
+
+                <div class="col-sm-2" style="padding-right:1px;padding-left:0px;">
+                    <div class="form-group">
+                        <input type="text" step="0.01" name="tmpEstimate" class="form-control tmpEstimate"
+                               placeholder="Estimate Salvage">
+                    </div>
+                </div>
+
+                <div class="col-sm-1" style="padding-right:1px;padding-left:0px;">
+                    <div class="form-group">
+                        <input type="text" step="1" name="tmpPercent" class="form-control tmpPercent"
+                               placeholder="Percent">
+                    </div>
+                </div>
+
+                <div class="col-sm-1" style="padding-right:0px;padding-left:0px;">
+                    <button type="button" class="btn btn-primary addItem" {{cssClassForAddMoreFixedAsset}}>+</button>
+                </div>
+            </div>
+        </div>
+
+        {{#each fixAsset}}
+            <div class="row listFixAsset">
+                <div class="col-sm-3"
+                     style="padding-right:2px;padding-left:2px;">{{> afQuickField name=(keyArgs @index "account") value=account readonly="true" label=false class="input-sm account" type="text"}}</div>
+
+                <div class="col-sm-9" style="padding-right:1px;padding-left:0px;">
+                    <div class="col-sm-3" style="padding-right:1px;padding-left:0px;">
+                        <div style="padding-right:2px;padding-left:2px;">{{> afQuickField name=(keyArgs @index "description")  value=description label=false type="text" class="itemDes input-sm" readonly="true"}}</div>
+                    </div>
+                    <div class="col-sm-2" style="padding-right:1px;padding-left:0px;">
+                        <div style="padding-right:2px;padding-left:2px;">{{> afQuickField name=(keyArgs @index "code")  value=code label=false type="text" class="code input-sm" readonly="true"}}</div>
+                    </div>
+                    <div class="col-sm-2" style="padding-right:1px;padding-left:0px;">
+                        <div style="padding-right:2px;padding-left:2px;">{{> afQuickField name=(keyArgs @index "value")  value=value label=false type="text" class="value input-sm" readonly="true"}}</div>
+                    </div>
+                    <div class="col-sm-1" style="padding-right:1px;padding-left:0px;">
+                        <div style="padding-right:2px;padding-left:2px;">{{> afQuickField name=(keyArgs @index "life")  value=life label=false type="text" class="life input-sm" readonly="true"}}</div>
+                    </div>
+                    <div class="col-sm-2" style="padding-right:1px;padding-left:0px;">
+                        <div style="padding-right:2px;padding-left:2px;">{{> afQuickField name=(keyArgs @index "estSalvage")  value=estSalvage label=false type="text" class="type input-sm" readonly="true"}}</div>
+                    </div>
+                    <div class="col-sm-1" style="padding-right:1px;padding-left:0px;">
+                        <div style="padding-right:2px;padding-left:2px;">{{> afQuickField name=(keyArgs @index "percent")  value=percent label=false type="text" class="percent input-sm" readonly="true"}}</div>
+                    </div>
+
+                    <div class="col-sm-1">
+                        <ul class="list-inline">
+                            <li><a href="#" class="js-update-item"><i class="fa fa-pencil"></i></a></li>
+                            <li><a href="#" class="js-destroy-item"><i class="fa fa-remove text-red"></i></a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        {{/each}}
+        <hr>
+    </div>
+</template>
+
+
+<template name="acc_FixAssetUpdate">
+    {{#autoForm schema=schema id="acc_FixAssetUpdate" doc=this}}
+        <div class="form-horizontal">
+            <div >
+                <label class="control-label col-sm-3" for="email">Account:</label>
+                <div class="col-sm-9">
+                    {{> afQuickField name="account" label=false}}
+                </div>
+            </div>
+            <div>
+                <label class="control-label col-sm-3" for="pwd">Description:</label>
+                <div class="col-sm-9">
+                    {{> afQuickField name="description"  label=false}}
+                </div>
+            </div>
+            <div>
+                <label class="control-label col-sm-3" for="pwd">Code:</label>
+                <div class="col-sm-9">
+                    {{> afQuickField name="code" label=false}}
+                </div>
+            </div>
+
+            <div>
+                <label class="control-label col-sm-3" for="pwd">Value:</label>
+                <div class="col-sm-9">
+                    {{> afQuickField name="value"  label=false}}
+
+                </div>
+            </div>
+            <div>
+                <label class="control-label col-sm-3" for="pwd">Life:</label>
+                <div class="col-sm-9">
+                    {{> afQuickField name="life" label=false}}
+
+                </div>
+            </div>
+            <div>
+                <label class="control-label col-sm-3" for="pwd">Est Salvage:</label>
+                <div class="col-sm-9">
+                    {{> afQuickField name="estSalvage"  label=false}}
+                </div>
+            </div>
+
+            <div>
+                <label class="control-label col-sm-3" for="pwd">Percent:</label>
+                <div class="col-sm-9">
+                    {{> afQuickField name="percent" label=false}}
+                </div>
+            </div>
+
+            <button type="submit" class="btn btn-primary">{{fa "floppy-o"}} Save</button>
+        </div>
+    {{/autoForm}}
+
+</template>

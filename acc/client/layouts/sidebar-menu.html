@@ -1,0 +1,62 @@
+<template name="Acc_sidebarMenu">
+    <li class="{{isActiveRoute name='acc.home'}}">
+        <a href="{{pathFor 'acc.home'}}">
+            <i class="fa fa-home"></i> <span>{{_ "acc.sidebarMenu.home"}}</span>
+        </a>
+    </li>
+
+    <!--Data-->
+    {{#if isInRole 'data-insert,data-update,data-remove' 'Acc'}}
+        <li class="header"><i class="fa fa-database"></i> DATA</li>
+        <li class="{{isActiveRoute name='acc.customer'}}">
+            <a href="{{pathFor 'acc.customer'}}">
+                <i class="fa fa-circle-o"></i> <span>{{_ "acc.sidebarMenu.customer"}}</span>
+            </a>
+        </li>
+        <li class="{{isActiveRoute name='acc.order'}}">
+            <a href="{{pathFor 'acc.order'}}">
+                <i class="fa fa-circle-o"></i> <span>{{_ "acc.sidebarMenu.order"}}</span>
+            </a>
+        </li>
+        <li class="{{isActiveRoute name='acc.journal'}}">
+            <a href="{{pathFor 'acc.journal'}}">
+                <i class="fa fa-circle-o"></i> <span>Journal</span>
+            </a>
+        </li>
+    {{/if}}
+
+    <!--Report-->
+    {{#if isInRole 'reporter' 'Acc'}}
+        <li class="header"><i class="fa fa-file-o"></i> REPORT</li>
+        <li class="{{isActiveRoute name='acc.customerReport'}}">
+            <a href="{{pathFor 'acc.customerReport'}}">
+                <i class="fa fa-circle-o"></i> <span>{{_ "acc.sidebarMenu.customer"}}</span>
+            </a>
+        </li>
+        <li class="{{isActiveRoute name='acc.orderReport'}}">
+            <a href="{{pathFor 'acc.orderReport'}}">
+                <i class="fa fa-circle-o"></i> <span>{{_ "acc.sidebarMenu.order"}}</span>
+            </a>
+        </li>
+    {{/if}}
+
+    <!--Settings-->
+    {{#if isInRole 'setting' 'Acc'}}
+        <li class="header"><i class="fa fa-cogs"></i> SETTING</li>
+        <li class="{{isActiveRoute name='core.exchange'}}">
+            <a href="{{pathFor 'core.exchange'}}">
+                <i class="fa fa-circle-o"></i> <span>{{_ "core.sidebarMenu.exchange"}}</span>
+            </a>
+        </li>
+        <li class="{{isActiveRoute name='acc.item'}}">
+            <a href="{{pathFor 'acc.item'}}">
+                <i class="fa fa-circle-o"></i> <span>{{_ "acc.sidebarMenu.item"}}</span>
+            </a>
+        </li>
+        <li class="{{isActiveRoute name='acc.chartAccount'}}">
+            <a href="{{pathFor 'acc.chartAccount'}}">
+                <i class="fa fa-circle-o"></i> <span>{{_ "acc.sidebarMenu.chartAccount"}}</span>
+            </a>
+        </li>
+    {{/if}}
+</template>

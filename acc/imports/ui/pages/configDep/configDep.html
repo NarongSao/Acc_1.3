@@ -1,0 +1,25 @@
+<!--Index-->
+<template name="acc_configDep">
+    <div class="animated fadeIn">
+        <!--<p>
+        <button type="button" class="btn btn-primary insert">{{fa "plus"}} Add New</button>
+    </p>-->
+        {{> tabular table=Acc.TabularTable.ConfigDep class="table table-striped table-bordered table-condensed table-hover"}}
+    </div>
+</template>
+<template name="acc_configDepAction">
+    <a href="#" class="btn btn-primary update"> {{fa "pencil"}}</a>
+</template>
+
+<!--Update-->
+<template name="acc_configDepUpdate">
+
+    {{#autoForm collection=Acc.Collection.ConfigDep id="acc_configDepUpdate" doc=this type="update"}}
+        <div class="row">
+            {{> afQuickField name='depPerTime'}}
+            {{> afQuickField name='depType'}}
+        </div>
+        <button type="submit" class="btn btn-primary">{{fa "floppy-o"}} Save</button>
+        <button type="reset" class="btn btn-default">{{fa "refresh"}} Reset</button>
+    {{/autoForm}}
+</template>

@@ -1,0 +1,40 @@
+<!--Index-->
+<template name="acc_mapFixAsset">
+    <div class="animated fadeIn">
+        <button type="button" class="btn btn-primary insert">{{fa "plus"}} Add New</button>
+        {{> tabular table=Acc.TabularTable.MapFixAsset class="table table-striped table-bordered table-condensed table-hover"}}
+    </div>
+</template>
+<template name="acc_mapFixAssetAction">
+    {{#tabularAction}}
+        <li><a href="#" class="update">{{fa "pencil"}} Update</a></li>
+        <li><a href="#" class="remove">{{fa "remove"}} Remove</a></li>
+
+    {{/tabularAction}}
+</template>
+
+<!--Insert-->
+<template name="acc_mapFixAssetInsert">
+    {{#autoForm collection=Acc.Collection.MapFixAsset id="acc_mapFixAssetInsert" type="insert"}}
+        <div class="row">
+            {{> afQuickField name='fixAsset'}}
+            {{> afQuickField name='accuFixAsset'}}
+            {{> afQuickField name='fixAssetExpense'}}
+        </div>
+        <button type="submit" class="btn btn-primary">{{fa "floppy-o"}} Save</button>
+        <button type="reset" class="btn btn-default">{{fa "refresh"}} Reset</button>
+    {{/autoForm}}
+</template>
+
+<!--Update-->
+<template name="acc_mapFixAssetUpdate">
+    {{#autoForm collection=Acc.Collection.MapFixAsset id="acc_mapFixAssetUpdate" doc=this type="update"}}
+        <div class="row">
+            {{> afQuickField name='fixAsset'}}
+            {{> afQuickField name='accuFixAsset'}}
+            {{> afQuickField name='fixAssetExpense'}}
+        </div>
+        <button type="submit" class="btn btn-primary">{{fa "floppy-o"}} Save</button>
+        <button type="reset" class="btn btn-default">{{fa "refresh"}} Reset</button>
+    {{/autoForm}}
+</template>
