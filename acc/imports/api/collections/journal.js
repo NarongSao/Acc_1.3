@@ -1,10 +1,9 @@
-
 import {Mongo} from 'meteor/mongo';
 import {SimpleSchema} from 'meteor/aldeed:simple-schema';
 import {AutoForm} from 'meteor/aldeed:autoform';
 import {moment} from 'meteor/momentjs:moment';
 
-
+import {__} from '../../../../core/common/libs/tapi18n-callback-helper.js';
 import {SelectOpts} from '../../ui/libs/select-opts';
 
 export const Journal = new Mongo.Collection('accJournal');
@@ -14,11 +13,21 @@ export const Journal = new Mongo.Collection('accJournal');
 Journal.schema = new SimpleSchema({
     journalDate: {
         type: Date,
-        label: "Date",
-        defaultValue: function () {
-            var currentDate = moment(new Date()).format('YYYY-MM-DD');
-            return currentDate;
+        label: "Journal Date",
+        defaultValue: moment().toDate(),
+        autoform: {
+            afFieldInput: {
+                type: "bootstrap-datetimepicker",
+                dateTimePickerOptions: {
+                    format: 'DD/MM/YYYY',
+                    showTodayButton: true
+                }
+            }
         }
+        /*defaultValue: function () {
+         var currentDate = moment(new Date()).format('YYYY-MM-DD');
+         return currentDate;
+         }*/
     },
     voucherId: {
         type: String,
@@ -62,9 +71,15 @@ Journal.schema = new SimpleSchema({
         label: "splitAccount",
         optional: true
     },
+    /* transaction: {
+     type: [Journal.journalDetal],
+     minCount: 1,
+     optional: true
+     }*/
     transaction: {
         type: [Object],
-        minCount: 1
+        minCount: 1,
+        optional: true
     },
     'transaction.$': {
         type: Object
@@ -72,86 +87,184 @@ Journal.schema = new SimpleSchema({
     'transaction.$.account': {
         type: String,
         max: 200,
-        label: "Account"
-    },
+        optional: true,
+        label: "Chart Of Account",
+        autoform: {
+            type: "select2",
+            placeholder: "Chart Of Account",
+            options: function () {
+                return SelectOpts.chartAccount();
+            }
+        }
+    }
+    ,
     'transaction.$.dr': {
         type: Number,
         decimal: true,
-        blackbox: true
-    },
+        optional: true,
+        label: "Debit",
+        autoform: {
+            type: 'inputmask',
+            placeholder: "Debit",
+            inputmaskOptions: function () {
+                return inputmaskOptions.decimal();
+            }
+        }
+    }
+    ,
     'transaction.$.cr': {
         type: Number,
         decimal: true,
-        blackbox: true
-    },
+        optional: true,
+        label: "Credit",
+        autoform: {
+            type: 'inputmask',
+            placeholder: "Credit",
+            inputmaskOptions: function () {
+                return inputmaskOptions.decimal();
+            }
+        }
+    }
+    ,
     'transaction.$.drcr': {
         type: Number,
         decimal: true,
-        optional: true
-    },
+        optional: true,
+        autoform: {
+            type: 'inputmask',
+            inputmaskOptions: function () {
+                return inputmaskOptions.decimal();
+            }
+        }
+    }
+
+    ,
+
     total: {
         type: Number,
         decimal: true,
-        optional: true
-    },
+        label: "Total",
+        optional: true,
+        autoform: {
+            type: 'inputmask',
+            inputmaskOptions: function () {
+                return inputmaskOptions.decimal();
+            }
+        }
+    }
+    ,
     endId: {
         type: String,
         optional: true,
         defaultValue: "0"
-    },
+    }
+    ,
     fixAssetExpenseId: {
         type: String,
         optional: true,
         defaultValue: "0"
     }
-    , closingId: {
+    ,
+    closingId: {
         type: String,
         optional: true,
         defaultValue: "0"
-    }, transactionAsset: {
+    }
+    /* ,
+     transactionAsset: {
+     type: [Journal.fixAssetSchema],
+     optional: true
+     } */,
+    transactionAsset: {
         type: [Object],
         optional: true
     },
     'transactionAsset.$': {
-        type: Object,
-        optional: true
+        type: Object
     },
     'transactionAsset.$.account': {
         type: String,
         max: 200,
-        label: "Account",
-        optional: true
+        optional: true,
+        label: "Chart Of Account",
+        autoform: {
+            type: "select2",
+            placeholder: "Chart Of Account",
+            allowClear: true,
+            options: function () {
+                return SelectOpts.fixAssetChatAccount();
+            }
+        }
     },
     'transactionAsset.$.value': {
         type: Number,
         decimal: true,
-        blackbox: true,
-        optional: true
+        label: "Value",
+        optional: true,
+        autoform: {
+            type: 'inputmask',
+            placeholder: "Value",
+            inputmaskOptions: function () {
+                return inputmaskOptions.decimal();
+            }
+        }
     }, 'transactionAsset.$.life': {
         type: Number,
-        blackbox: true,
-        optional: true
+        optional: true,
+        label: "Life (Year)",
+        autoform: {
+            type: 'inputmask',
+            placeholder: "Life(Year)",
+
+            inputmaskOptions: function () {
+                return inputmaskOptions.integer();
+            }
+        }
     },
     'transactionAsset.$.estSalvage': {
         type: Number,
         optional: true,
-        blackbox: true
+        label: "Estimate Salvage",
+
+        autoform: {
+            type: 'inputmask',
+            placeholder: "Estimate Salvage",
+            inputmaskOptions: function () {
+                return inputmaskOptions.decimal();
+            }
+        }
     },
     'transactionAsset.$.code': {
         type: String,
+        label: "Code",
         optional: true,
-        blackbox: true
+        autoform: {
+            placeholder: "Code"
+        }
     },
     'transactionAsset.$.percent': {
         type: Number,
+        label: "Percentage",
         decimal: true,
-        optional: true
+        optional: true,
+        autoform: {
+            type: 'inputmask',
+            placeholder: "Percentage",
+            inputmaskOptions: function () {
+                return inputmaskOptions.percentage();
+            }
+        }
     },
-
     'transactionAsset.$.description': {
+        label: "Description",
         type: String,
-        optional: true
+        optional: true,
+        autoform: {
+            placeholder: "Description",
+        }
     }
+
+
     /*createdAt: {
      type: Date,
      label: "Create Date",
@@ -192,23 +305,76 @@ Journal.schema = new SimpleSchema({
 });
 
 
-
-
-
-
 SimpleSchema.messages({
     "uniqueVoucher": "Voucher must be unique."
 })
 
 
-
 //Sub
-Journal.fixAssetSchema= new SimpleSchema({
+Journal.journalDetal = new SimpleSchema({
     account: {
         type: String,
         max: 200,
+        optional: true,
+        label: "Chart Of Account",
         autoform: {
             type: "select2",
+            placeholder: "Chart Of Account",
+            options: function () {
+                return SelectOpts.chartAccount();
+            }
+        }
+    },
+    dr: {
+        type: Number,
+        decimal: true,
+        optional: true,
+        label: "Debit",
+        autoform: {
+            type: 'inputmask',
+            placeholder: "Debit",
+            inputmaskOptions: function () {
+                return inputmaskOptions.decimal();
+            }
+        }
+    },
+    cr: {
+        type: Number,
+        decimal: true,
+        optional: true,
+        label: "Credit",
+        autoform: {
+            type: 'inputmask',
+            placeholder: "Credit",
+            inputmaskOptions: function () {
+                return inputmaskOptions.decimal();
+            }
+        }
+    },
+    drcr: {
+        type: Number,
+        decimal: true,
+        optional: true,
+        autoform: {
+            type: 'inputmask',
+            inputmaskOptions: function () {
+                return inputmaskOptions.decimal();
+            }
+        }
+    }
+});
+
+//Sub
+Journal.fixAssetSchema = new SimpleSchema({
+    account: {
+        type: String,
+        max: 200,
+        optional: true,
+        label: "Chart Of Account",
+        autoform: {
+            type: "select2",
+            placeholder: "Chart Of Account",
+            allowClear: true,
             options: function () {
                 return SelectOpts.fixAssetChatAccount();
             }
@@ -217,34 +383,75 @@ Journal.fixAssetSchema= new SimpleSchema({
     value: {
         type: Number,
         decimal: true,
-        optional: true
+        label: "Value",
+        optional: true,
+        autoform: {
+            type: 'inputmask',
+            placeholder: "Value",
+            inputmaskOptions: function () {
+                return inputmaskOptions.decimal();
+            }
+        }
     }, life: {
         type: Number,
-        optional: true
+        optional: true,
+        label: "Life (Year)",
+        autoform: {
+            type: 'inputmask',
+            placeholder: "Life(Year)",
+
+            inputmaskOptions: function () {
+                return inputmaskOptions.integer();
+            }
+        }
     },
     estSalvage: {
         type: Number,
-        optional: true
+        optional: true,
+        label: "Estimate Salvage",
+
+        autoform: {
+            type: 'inputmask',
+            placeholder: "Estimate Salvage",
+            inputmaskOptions: function () {
+                return inputmaskOptions.decimal();
+            }
+        }
     },
     code: {
         type: String,
-        optional: true
+        label: "Code",
+        optional: true,
+        autoform: {
+            placeholder: "Code"
+        }
     },
     percent: {
         type: Number,
+        label: "Percentage",
         decimal: true,
-        optional: true
+        optional: true,
+        autoform: {
+            type: 'inputmask',
+            placeholder: "Percentage",
+            inputmaskOptions: function () {
+                return inputmaskOptions.percentage();
+            }
+        }
     },
     description: {
+        label: "Description",
         type: String,
-        optional: true
+        optional: true,
+        autoform: {
+            placeholder: "Description",
+        }
     }
-}); 
-
-
+});
 
 Meteor.startup(function () {
     Journal.fixAssetSchema.i18n("acc.journal.schema");
+    Journal.journalDetal.i18n("acc.journal.schema");
     Journal.schema.i18n("acc.journal.schema");
     Journal.attachSchema(Journal.schema);
 });

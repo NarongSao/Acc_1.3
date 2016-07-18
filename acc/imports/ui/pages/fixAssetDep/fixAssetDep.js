@@ -8,44 +8,46 @@ import {lightbox} from 'meteor/theara:lightbox-helpers';
 import {TAPi18n} from 'meteor/tap:i18n';
 import {ReactiveTable} from 'meteor/aslagle:reactive-table';
 import {moment} from 'meteor/momentjs:moment';
-import {DateTimePicker} from 'meteor/tsega:bootstrap3-datetimepicker';
 
 // Lib
-import {createNewAlertify} from '../../../../core/client/libs/create-new-alertify.js';
-import {reactiveTableSettings} from '../../../../core/client/libs/reactive-table-settings.js';
-import {renderTemplate} from '../../../../core/client/libs/render-template.js';
-import {destroyAction} from '../../../../core/client/libs/destroy-action.js';
-import {displaySuccess, displayError} from '../../../../core/client/libs/display-alert.js';
-import {__} from '../../../../core/common/libs/tapi18n-callback-helper.js';
+import {createNewAlertify} from '../../../../../core/client/libs/create-new-alertify.js';
+import {reactiveTableSettings} from '../../../../../core/client/libs/reactive-table-settings.js';
+import {renderTemplate} from '../../../../../core/client/libs/render-template.js';
+import {destroyAction} from '../../../../../core/client/libs/destroy-action.js';
+import {displaySuccess, displayError} from '../../../../../core/client/libs/display-alert.js';
+import {__} from '../../../../../core/common/libs/tapi18n-callback-helper.js';
 
 // Component
-import '../../../../core/client/components/loading.js';
-import '../../../../core/client/components/column-action.js';
-import '../../../../core/client/components/form-footer.js';
+import '../../../../../core/client/components/loading.js';
+import '../../../../../core/client/components/column-action.js';
+import '../../../../../core/client/components/form-footer.js';
+
 
 // Collection
-import {Customer} from '../../api/collections/customer.js';
+import {FixAssetDep} from '../../../api/collections/fixAssetDep';
+
 
 // Tabular
-import {CustomerTabular} from '../../../common/tabulars/customer.js';
+import {FixAssetDepTabular} from '../../../../common/tabulars/fixAssetDep';
 
 // Page
-import './customer.html';
+import './fixAssetDep.html';
 
 // Declare template
 var fixAssetDepTpl = Template.acc_fixAssetDep,
-    fixAssetListTPL=Template.acc_fixAssetDepList,
-    fixAssetDepSummaryListTpl=Template.acc_fixAssetDepSummaryList;
-    fixAssetDepTpl.onRendered(function () {
+    fixAssetListTPL = Template.acc_fixAssetDepList,
+    fixAssetDepSummaryListTpl = Template.acc_fixAssetDepSummaryList;
+
+
+fixAssetDepTpl.onRendered(function () {
     createNewAlertify("fixAssetDep");
-    // SEO
-    SEO.set({
-        title: 'Fix Asset List',
-        description: 'Description for this page'
-    });
+
 })
 
 fixAssetDepTpl.helpers({
+    tabularTable(){
+        return FixAssetDepTabular;
+    },
     selector: function () {
         return {branchId: Session.get("currentBranch")};
     }
@@ -56,28 +58,28 @@ fixAssetDepTpl.events({
     'click .depList': function (e, t) {
         var self = this;
 
-        var params={};
-        var queryParams={};
+        var params = {};
+        var queryParams = {};
 
-        queryParams.branchId=Session.get("currentBranch");
-        queryParams.journalId=self.journalId;
+        queryParams.branchId = Session.get("currentBranch");
+        queryParams.journalId = self.journalId;
 
         var path = FlowRouter.path("acc.fixAssetDepList", params, queryParams);
 
-        window.open(path,"_blank");
+        window.open(path, "_blank");
 
     },
     'click .fixedAssetSummaryDepreciation': function (e, t) {
         var self = this;
 
-        var params={};
-        var queryParams={};
+        var params = {};
+        var queryParams = {};
 
-        queryParams.branchId=Session.get("currentBranch");
+        queryParams.branchId = Session.get("currentBranch");
 
         var path = FlowRouter.path("acc.fixAssetDepSummaryList", params, queryParams);
 
-        window.open(path,"_blank");
+        window.open(path, "_blank");
 
     }
 });
@@ -99,8 +101,8 @@ fixAssetListTPL.helpers({
         //FlowRouter.watchPathChange();
         var q = FlowRouter.current().queryParams;
 
-        Fetcher.setDefault('data',false);
-        Fetcher.retrieve('data','acc_fixAssetDepList',q);
+        Fetcher.setDefault('data', false);
+        Fetcher.retrieve('data', 'acc_fixAssetDepList', q);
 
         return Fetcher.get('data');
     }
@@ -122,8 +124,8 @@ fixAssetDepSummaryListTpl.helpers({
         //FlowRouter.watchPathChange();
         var q = FlowRouter.current().queryParams;
 
-        Fetcher.setDefault('data',false);
-        Fetcher.retrieve('data','acc_fixAssetDepSummaryList',q);
+        Fetcher.setDefault('data', false);
+        Fetcher.retrieve('data', 'acc_fixAssetDepSummaryList', q);
 
         return Fetcher.get('data');
     }

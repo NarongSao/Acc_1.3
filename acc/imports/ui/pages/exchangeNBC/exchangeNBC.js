@@ -1,4 +1,3 @@
-
 import {Template} from 'meteor/templating';
 import {AutoForm} from 'meteor/aldeed:autoform';
 import {Roles} from  'meteor/alanning:roles';
@@ -9,29 +8,28 @@ import {lightbox} from 'meteor/theara:lightbox-helpers';
 import {TAPi18n} from 'meteor/tap:i18n';
 import {ReactiveTable} from 'meteor/aslagle:reactive-table';
 import {moment} from 'meteor/momentjs:moment';
-import {DateTimePicker} from 'meteor/tsega:bootstrap3-datetimepicker';
 
 // Lib
-import {createNewAlertify} from '../../../../core/client/libs/create-new-alertify.js';
-import {reactiveTableSettings} from '../../../../core/client/libs/reactive-table-settings.js';
-import {renderTemplate} from '../../../../core/client/libs/render-template.js';
-import {destroyAction} from '../../../../core/client/libs/destroy-action.js';
-import {displaySuccess, displayError} from '../../../../core/client/libs/display-alert.js';
-import {__} from '../../../../core/common/libs/tapi18n-callback-helper.js';
+import {createNewAlertify} from '../../../../../core/client/libs/create-new-alertify.js';
+import {reactiveTableSettings} from '../../../../../core/client/libs/reactive-table-settings.js';
+import {renderTemplate} from '../../../../../core/client/libs/render-template.js';
+import {destroyAction} from '../../../../../core/client/libs/destroy-action.js';
+import {displaySuccess, displayError} from '../../../../../core/client/libs/display-alert.js';
+import {__} from '../../../../../core/common/libs/tapi18n-callback-helper.js';
 
 // Component
-import '../../../../core/client/components/loading.js';
-import '../../../../core/client/components/column-action.js';
-import '../../../../core/client/components/form-footer.js';
+import '../../../../../core/client/components/loading.js';
+import '../../../../../core/client/components/column-action.js';
+import '../../../../../core/client/components/form-footer.js';
 
 // Collection
-import {Customer} from '../../api/collections/customer.js';
+import {ExchangeNBC} from '../../../api/collections/exchangeNBC';
 
 // Tabular
-import {CustomerTabular} from '../../../common/tabulars/customer.js';
+import {ExchangeNBCTabular} from '../../../../common/tabulars/exchangeNBC.js';
 
 // Page
-import './customer.html';
+import './exchangeNBC.html';
 
 // Declare template
 var indexTpl = Template.acc_exchangeNBC,
@@ -41,17 +39,9 @@ var indexTpl = Template.acc_exchangeNBC,
 
 // Index
 indexTpl.onCreated(function() {
-  // SEO
-  SEO.set({
-    title: 'Exchange',
-    description: 'Description for this page'
-  });
-});
-
-indexTpl.onRendered(function() {
-  // Create new  alertify
   createNewAlertify("exchangeNBC");
 });
+
 
 insertTpl.events({
   'submit .preventDef': function(evt) {
@@ -72,7 +62,7 @@ indexTpl.events({
       .maximize();
   },
   'click .update': function(e, t) {
-    var data = Acc.Collection.ExchangeNBC.findOne(this._id);
+    var data = ExchangeNBC.findOne(this._id);
     alertify.exchangeNBC(fa("pencil", "Exchange"), renderTemplate(
         updateTpl, data))
       .maximize();
@@ -84,8 +74,7 @@ indexTpl.events({
       fa("remove", "Exchange"),
       "Are you sure to delete [" + this.dateTime + "]?",
       function() {
-
-        Acc.Collection.ExchangeNBC.remove(id, function(error) {
+        ExchangeNBC.remove(id, function(error) {
           if (error) {
             alertify.error(error.message);
           } else {
@@ -101,12 +90,17 @@ indexTpl.events({
   }
 });
 
-// Insert
-Template.acc_exchangeNBCInsert.onRendered(function() {
-  configDate();
-});
+indexTpl.helpers({
+  tabularTable(){
+    return ExchangeNBCTabular;
+  },
+})
 
 insertTpl.helpers({
+  collection(){
+    return ExchangeNBC;
+  },
+
   doc: function() {
     var baseCurrency = 'KHR';
 
@@ -127,10 +121,13 @@ insertTpl.helpers({
   }
 });
 
-// Update
-updateTpl.onRendered(function() {
-  configDate();
-});
+updateTpl.helpers({
+  collection(){
+    return ExchangeNBC;
+  }
+})
+
+
 
 // Hook
 AutoForm.hooks({
@@ -152,9 +149,3 @@ AutoForm.hooks({
     }
   }
 });
-
-// Config on rendered
-var configDate = function() {
-  var name = $('[name="dateTime"]');
-  DateTimePicker.dateTime(name);
-};

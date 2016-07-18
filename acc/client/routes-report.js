@@ -14,7 +14,7 @@ import {Layout} from '../../core/client/libs/render-layout.js';
 import '../../core/imports/ui/layouts/report/index.html';
 
 // Group
-let SimplePOSRoutes = FlowRouter.group({
+let AccRoutes = FlowRouter.group({
     prefix: '/acc',
     title: "Simple POS",
     titlePrefix: 'Simple POS > ',
@@ -25,7 +25,7 @@ let SimplePOSRoutes = FlowRouter.group({
 
 // Customer list
 import '../imports/ui/reports/customer.js';
-SimplePOSRoutes.route('/customer-report', {
+AccRoutes.route('/customer-report', {
     name: 'acc.customerReport',
     title: __('acc.customerReport.title'),
     action: function (params, queryParams) {
@@ -40,7 +40,7 @@ SimplePOSRoutes.route('/customer-report', {
     }
 });
 
-SimplePOSRoutes.route('/customer-report-gen', {
+AccRoutes.route('/customer-report-gen', {
     name: 'acc.customerReportGen',
     title: __('acc.customerReport.title'),
     action: function (params, queryParams) {
@@ -50,7 +50,7 @@ SimplePOSRoutes.route('/customer-report-gen', {
 
 // Order
 import '../imports/ui/reports/order.js';
-SimplePOSRoutes.route('/order-report', {
+AccRoutes.route('/order-report', {
     name: 'acc.orderReport',
     title: __('acc.orderReport.title'),
     action: function (params, queryParams) {
@@ -65,10 +65,30 @@ SimplePOSRoutes.route('/order-report', {
     }
 });
 
-SimplePOSRoutes.route('/order-report-gen', {
+AccRoutes.route('/order-report-gen', {
     name: 'acc.orderReportGen',
     title: __('acc.orderReport.title'),
     action: function (params, queryParams) {
         Layout.report('Acc_orderReportGen');
     }
 });
+
+
+
+
+AccRoutes.route('/fixAssetDepSummaryList', {
+    name: 'acc.fixAssetDepSummaryList',
+    title: __('acc.fixAssetDepSummaryList.title'),
+    action: function (params, queryParams) {
+        Layout.report('acc_fixAssetDepSummaryList');
+    }
+});
+
+AccRoutes.route('/fixAssetDepList', {
+    name: 'acc.fixAssetDepList',
+    title: __('acc.fixAssetDepList.title'),
+    action: function (params, queryParams) {
+        Layout.report('acc_fixAssetDepList');
+    }
+});
+

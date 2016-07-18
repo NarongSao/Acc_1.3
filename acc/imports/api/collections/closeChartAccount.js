@@ -57,6 +57,11 @@ CloseChartAccount.schema = new SimpleSchema({
         type : String,
         label: "Parent",
         optional: true
+    },
+    endId: {
+        type : String,
+        label: "End",
+        optional: true
     }
 });
 

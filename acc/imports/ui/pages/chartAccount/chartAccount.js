@@ -40,11 +40,6 @@ import './chartAccount.html';
 Template.acc_chartAccount.onRendered(function () {
     /* Create new alertify */
     createNewAlertify("chartAccount");
-    // SEO
-    /*SEO.set({
-     title: 'Chart Account',
-     description: 'Description for this page'
-     });*/
 });
 
 var actionTpl = Template.acc_chartAccountAction;

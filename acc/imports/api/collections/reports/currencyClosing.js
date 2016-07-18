@@ -1,4 +1,4 @@
-Acc.Schema.CurrencyClosing = new SimpleSchema({
+CurrencyClosing = new SimpleSchema({
   branchId: {
     type: String,
     label: "Branch",

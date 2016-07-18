@@ -21,6 +21,7 @@ import {__} from '../../../../../core/common/libs/tapi18n-callback-helper.js';
 
 // Collection
 import {ChartAccount} from '../../../api/collections/chartAccount';
+import {Journal} from '../../../api/collections/journal';
 
 
 //Method
@@ -34,36 +35,36 @@ import '../../../../../core/client/components/form-footer.js';
 
 // Page
 import './fixAsset.html';
+import '../../components/style.css';
 
 // Declare template
 var fixAssetTpl = Template.acc_FixAsset,
-    updateTpl = Template.acc_FixAssetUpdate;
+    updateTpl = Template.acc_FixAssetUpdate,
+    actionFixAssetTmpl=Template.acc_actionFixAsset;
 
 
 var stateAsset = new ReactiveObj({
     account: "",
-    value: "",
-    life: "",
-    estSalvage: "",
+    value: 0,
+    life: 0,
+    estSalvage: 0,
     des: "",
     code: "",
-    percent: "",
+    percent: 0,
     cssClassForAddMoreFixedAsset: 'disabled'
 });
+
 var fixAssetDepCollection;
 fixAssetTpl.onCreated(function () {
-
-    let data=Template.currentData();
-    fixAssetDepCollection=data.fixAssetDepCollection;
-
+    let data = Template.currentData();
+    fixAssetDepCollection = data.fixAssetDepCollection;
+    fixAssetDepCollection.remove({});
+    if(data.transactionAsset){
+        data.transactionAsset.forEach(function (obj) {
+            fixAssetDepCollection.insert(obj);
+        })
+    }
     createNewAlertify('fixAsset');
-    Meteor.setTimeout(function () {
-        $('[name="tmpAccount"]').select2();
-
-        $('.tmpAccount').select2('val', '');
-
-    }, 50)
-
 })
 
 fixAssetTpl.helpers({
@@ -80,44 +81,24 @@ fixAssetTpl.helpers({
         }
         return stateAsset.get('cssClassForAddMoreFixedAsset');
     },
-    chartAccount: function () {
-        var listChartAccount = [];
-        ChartAccount.find({accountTypeId: '11'}, {sort: {code: 1}})
-            .forEach(function (obj) {
-                listChartAccount.push({
-                    _id: obj._id,
-                    name: obj.name,
-                    code: Spacebars.SafeString(SpaceChar.space(obj.level * 6) + obj.code)
-                });
-            });
-        return listChartAccount;
-    },
     fixAsset: function () {
-       /* debugger;
-        let data = Template.currentData();
-        if (data && data.transactionAsset) {
-            data.transactionAsset.forEach((obj)=> {
-                fixAssetDepCollection.insert(obj);
-            });
-        }*/
-        let getItems = fixAssetDepCollection.find().fetch();
-        return getItems;
+        return fixAssetDepCollection.find().fetch();
     },
-    keyArgs(index, name){
-        return `transactionAsset.${index}.${name}`;
+    schema(){
+        return Journal.fixAssetSchema;
     }
 })
 
 
 fixAssetTpl.events({
     'click .addItem': function (e, t) {
-        let accountOrg = $('[name="tmpAccount"]').val();
-        let value = $('[name="tmpValue"]').val();
-        let life = $('[name="tmpLife"]').val();
-        let estSalvage = $('[name="tmpEstimate"]').val();
-        let code = $('[name="tmpCode"]').val();
-        let itemDes = $('[name="tmpItemDes"]').val();
-        let percent = $('[name="tmpPercent"]').val();
+        let accountOrg = $('[name="account"]').val();
+        let value = $('[name="value"]').val();
+        let life = $('[name="life"]').val();
+        let estSalvage = $('[name="estSalvage"]').val();
+        let code = $('[name="code"]').val();
+        let itemDes = $('[name="description"]').val();
+        let percent = $('[name="percent"]').val();
 
         fixAssetDepCollection.insert({
             account: accountOrg,
@@ -130,48 +111,47 @@ fixAssetTpl.events({
         });
 
 
-        $('.tmpAccount').select2('val', '');
-        $('.tmpCode').val('');
-        $('.tmpValue').val('');
-        $('.tmpLife').val('');
-        $('.tmpEstimate').val('');
-        $('.tmpItemDes').val('');
-        $('.tmpPercent').val('');
+        $('#account').select2('val', '');
+        $('#code').val('');
+        $('#value').val(0);
+        $('#life').val(0);
+        $('#estSalvage').val(0);
+        $('#description').val('');
+        $('#percent').val(0);
 
         stateAsset.set('account', "");
-        stateAsset.set('value', "");
-        stateAsset.set('life', "");
-        stateAsset.set('estSalvage', "");
+        stateAsset.set('value', 0);
+        stateAsset.set('life', 0);
+        stateAsset.set('estSalvage', 0);
         stateAsset.set('code', "");
-        stateAsset.set('percent', "");
+        stateAsset.set('percent', 0);
         stateAsset.set('itemDes', "");
 
 
     },
     'click .js-destroy-item': function (e, t) {
-        debugger;
         var self = this;
         fixAssetDepCollection.remove({_id: self._id});
     },
-    'change .tmpAccount': function (e, t) {
-        stateAsset.set('account', $('#account').val())
+    'change #account': function (e, t) {
+        stateAsset.set('account', $(e.currentTarget).val())
     },
-    'change .tmpCode': function (e, t) {
+    'change #code': function (e, t) {
         stateAsset.set('code', $(e.currentTarget).val())
     },
-    'keyup .tmpValue': function (e, t) {
+    'keyup #value': function (e, t) {
         stateAsset.set('value', $(e.currentTarget).val());
     },
-    'keyup .tmpLife': function (e, t) {
+    'keyup #life': function (e, t) {
         stateAsset.set('life', $(e.currentTarget).val());
     },
-    'keyup .tmpEstimate': function (e, t) {
+    'keyup #estSalvage': function (e, t) {
         stateAsset.set('estSalvage', $(e.currentTarget).val());
     },
-    'keyup .tmpItemDes': function (e, t) {
+    'keyup #description': function (e, t) {
         stateAsset.set('itemDes', $(e.currentTarget).val());
     },
-    'keyup .tmpPercent': function (e, t) {
+    'keyup #percent': function (e, t) {
         stateAsset.set('percent', $(e.currentTarget).val());
     },
     'click .js-update-item': function (e, t) {
@@ -183,10 +163,9 @@ fixAssetTpl.events({
 
 updateTpl.helpers({
     schema(){
-        return Schema.fixAssetSchema;
+        return Journal.fixAssetSchema;
     }
 });
-
 
 
 AutoForm.hooks({

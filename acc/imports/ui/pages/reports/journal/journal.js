@@ -45,7 +45,6 @@ reportTpl.events({
 //Event
 generateTpl.events({
     'dblclick .journalRow': function (e, t) {
-        debugger;
         var self = this;
         itemsState.clear();
         var selectorGetLastDate = {};

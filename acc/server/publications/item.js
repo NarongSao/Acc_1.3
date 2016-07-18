@@ -4,7 +4,7 @@ import {SimpleSchema} from 'meteor/aldeed:simple-schema';
 // Collection
 import {Item} from '../../imports/api/collections/item.js';
 
-Meteor.publish('acc.item', function simpleItem(selector = {}, options = {}) {
+Meteor.publish('acc.item', function simpleItem(selector, options) {
     this.unblock();
     
     new SimpleSchema({

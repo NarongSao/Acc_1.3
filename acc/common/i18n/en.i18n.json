@@ -5,7 +5,17 @@
       "item": "Item",
       "customer": "Customer",
       "order": "Order",
-      "chartAccount": "Chart Account"
+      "chartAccount": "Chart Account",
+      "journal": "Journal",
+      "configDep": "Config Depreciation",
+      "endOfProcess": "End Of Process",
+      "exchangeNBC": "Exchange NBC",
+      "fixAssetDep": "Fixed Asset Depreciation",
+      "fixAssetExpense": "Fixed Asset Expense",
+      "mapFixAsset": "Map Fixed Asset",
+      "mapClosing": "Map Closing",
+      "mapNBCBalance": "Map NBC Balance",
+      "mapNBCIncome": "Map NBC Income"
     },
     "home": {
       "title": "Home",
@@ -101,6 +111,36 @@
     },
     "chartAccount": {
       "title": "Chart Account"
+    },
+    "journal": {
+      "title": "Journal"
+    },
+    "configDep": {
+      "title": "Config Depreciation"
+    },
+    "endOfProcess": {
+      "title": "End Of Process"
+    },
+    "exchangeNBC": {
+      "title": "Exchange NBC"
+    },
+    "fixAssetDep": {
+      "title": "Fixed Asset Depreciation"
+    },
+    "fixAssetExpense": {
+      "title": "Fixed Asset Expense"
+    },
+    "mapFixAsset": {
+      "title": "Map Fixed Asset"
+    },
+    "mapClosing": {
+      "title": "Map Closing"
+    },
+    "mapNBCBalance": {
+      "title": "Map NBC Balance"
+    },
+    "mapNBCIncome": {
+      "title": "Map NBC Income"
     }
   }
 }

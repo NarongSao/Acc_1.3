@@ -13,9 +13,10 @@ import {NetInCome} from '../../imports/api/collections/netIncome';
 
 
 Meteor.methods({
-    getEndOfProcess: function (selector,branchId,selectorGetLastBalance,lastDate,dateSelect) {
-        var data=[];
-        var dataUse=[];
+    getEndOfProcess: function (selector, branchId, selectorGetLastBalance, lastDate, dateSelect,endId) {
+
+        var data = [];
+        var dataUse = [];
         var result = Journal.aggregate([
             {$unwind: "$transaction"},
             {$match: selector},
@@ -36,7 +37,7 @@ Meteor.methods({
 
             {$sort: {"_id.code": 1}}
         ]);
-        var curMonth=moment(dateSelect).format("MM");
+        var curMonth = moment(dateSelect).format("MM");
 
         result.forEach(function (obj) {
             data.push({
@@ -52,14 +53,15 @@ Meteor.methods({
                 parentId: obj._id.parent
             })
         });
+
         if (lastDate !== null) {
-            if(curMonth=="12"){
+            if (curMonth == "12") {
                 selectorGetLastBalance.accountTypeId = {
                     $gte: "01",
                     $lte: "39"
                 };
                 var resultLast = CloseChartAccount.find(selectorGetLastBalance);
-            }else{
+            } else {
                 var resultLast = CloseChartAccount.find(selectorGetLastBalance);
             }
 
@@ -83,8 +85,8 @@ Meteor.methods({
 
 
         data.reduce(function (key, val) {
-            if (!key[val.closeChartAccountId+val.currencyId]) {
-                key[val.closeChartAccountId+val.currencyId] = {
+            if (!key[val.closeChartAccountId + val.currencyId]) {
+                key[val.closeChartAccountId + val.currencyId] = {
                     closeChartAccountId: val.closeChartAccountId,
                     code: val.code,
                     name: val.name,
@@ -96,13 +98,12 @@ Meteor.methods({
                     level: val.level,
                     parentId: val.parentId
                 };
-                dataUse.push(key[val.closeChartAccountId+val.currencyId]);
+                dataUse.push(key[val.closeChartAccountId + val.currencyId]);
             } else {
-                key[val.closeChartAccountId+val.currencyId].value += val.value;
+                key[val.closeChartAccountId + val.currencyId].value += val.value;
             }
             return key;
         }, {});
-
         dataUse.forEach(function (ob) {
             CloseChartAccount.insert({
                 closeChartAccountId: ob.closeChartAccountId,
@@ -114,28 +115,25 @@ Meteor.methods({
                 branchId: ob.branchId,
                 accountTypeId: ob.accountTypeId,
                 level: ob.level,
-                parentId: ob.parentId
+                parentId: ob.parentId,
+                endId: endId
             })
         });
 
-        DateEndOfProcess.insert({
-            closeDate: dateSelect,
-            branchId: branchId
-        })
 
-       return "Success";
+        return "Success";
     },
-    removeEndOfProcess: function(id){
-        var data= DateEndOfProcess.findOne({_id: id});
-                    CloseChartAccount.remove({closeDate: data.closeDate}, function (error) {
-                        if (!error) {
-                            NetInCome.remove({endId: id});
-                            if(moment(data.closeDate).format("MM")==12){
-                                Journal.remove({endId: id});
-                            }
-                            DateEndOfProcess.remove(id);
-                        }
-                    });
+    removeEndOfProcess: function (id) {
+        var data = DateEndOfProcess.findOne({_id: id});
+       CloseChartAccount.remove({endId: id}, function (error) {
+            if (!error) {
+                NetInCome.remove({endId: id});
+                if (moment(data.closeDate).format("MM") == 12) {
+                    Journal.remove({endId: id});
+                }
+                DateEndOfProcess.remove(id);
+            }
+        });
 
     }
 })

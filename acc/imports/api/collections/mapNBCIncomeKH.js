@@ -3,6 +3,8 @@ import {SimpleSchema} from 'meteor/aldeed:simple-schema';
 import {AutoForm} from 'meteor/aldeed:autoform';
 import {moment} from 'meteor/momentjs:moment';
 
+
+import {SelectOpts} from '../../ui/libs/select-opts';
 /**
  * Collection
  *
@@ -36,7 +38,7 @@ MapNBCIncomeKH.schema = new SimpleSchema({
             options: function () {
                 var selector={};
                 selector.accountTypeNBC="Balance";
-                return Acc.List.chartAccountNBCKH({accountTypeNBC:"Income"});
+                return SelectOpts.chartAccountNBCKH({accountTypeNBC:"Income"});
             }
         }
     }

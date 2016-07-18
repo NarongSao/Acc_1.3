@@ -1,33 +1,23 @@
-<!--Journal Temporary-->
-<template name="acc_chartAccountDetail">
-    <div class="row">
-        <div class="col-sm-12" style="padding-right:1px;padding-left:0px;">
-            <b>Chart of Account</b>
-        </div>
 
-    </div>
-    <div class="row">
-        <div class="col-sm-11" style="padding-right:1px;padding-left:0px;">
-            <div class="form-group">
-                <select class="tmpAccount" name="tmpAccount" style="width: 100%;" >
-                    {{#each chartAccount}}
-                        <option value="{{code}} | {{name}} | {{accountType}}">{{code}} | {{name}} | <span
-                                class="pull-right">{{accountType}}</span></option>
-                    {{/each}}
-                </select>
+<template name="acc_chartAccountDetail">
+    {{#autoForm schema=schema id="acc_chartAccountDetail"}}
+        <div class="row">
+            <div class="col-sm-11" style="padding-right:1px;padding-left:0px;">
+                {{> afQuickField name="chartAccount"}}
+            </div>
+            <div class="col-sm-1" style="padding-right:0px;padding-left:0px;margin-top: 5px;">
+                <br>
+                <button type="button" class="btn btn-primary addItem" {{cssClassForAddMore}}>+</button>
             </div>
         </div>
-        <div class="col-sm-1" style="padding-right:0px;padding-left:0px;">
-            <button type="button" class="btn btn-primary addItem" {{cssClassForAddMore}}>+</button>
-        </div>
-    </div>
-    <hr>
-    {{#each detail}}
-        <div class="row col-sm-11">
-            {{> afQuickField name=indexAccount value=account id=indexAccount readonly="true" label=false class="input-sm account"}}
-        </div>
-        <div class="col-sm-1" style="padding-right:1px;padding-left:0px;">
-            <button type="button" class="btn btn-danger removeItem input-sm">-</button>
-        </div>
-    {{/each}}
+        <hr>
+        {{#each detail}}
+            <div class="row col-sm-11">
+                <input type="text" value={{chartAccount}} style='padding-bottom: 1px; width="100%";' class="form-control  input-sm" readonly=true>
+            </div>
+            <div class="col-sm-1" style="padding-right:1px;padding-left:0px;padding-bottom: 1px">
+                <button type="button" class="btn btn-danger removeItem input-sm">-</button>
+            </div>
+        {{/each}}
+    {{/autoForm}}
 </template>

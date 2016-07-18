@@ -4,7 +4,7 @@ import {SimpleSchema} from 'meteor/aldeed:simple-schema';
 // Collection
 import {Order} from '../../imports/api/collections/order.js';
 
-Meteor.publish('acc.order', function simpleOrder(selector = {}, options = {}) {
+Meteor.publish('acc.order', function simpleOrder(selector , options) {
     this.unblock();
     
     new SimpleSchema({

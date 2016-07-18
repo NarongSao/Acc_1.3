@@ -10,26 +10,26 @@ import {ReactiveTable} from 'meteor/aslagle:reactive-table';
 import {moment} from 'meteor/momentjs:moment';
 
 // Lib
-import {createNewAlertify} from '../../../../core/client/libs/create-new-alertify.js';
-import {reactiveTableSettings} from '../../../../core/client/libs/reactive-table-settings.js';
-import {renderTemplate} from '../../../../core/client/libs/render-template.js';
-import {destroyAction} from '../../../../core/client/libs/destroy-action.js';
-import {displaySuccess, displayError} from '../../../../core/client/libs/display-alert.js';
-import {__} from '../../../../core/common/libs/tapi18n-callback-helper.js';
+import {createNewAlertify} from '../../../../../core/client/libs/create-new-alertify.js';
+import {reactiveTableSettings} from '../../../../../core/client/libs/reactive-table-settings.js';
+import {renderTemplate} from '../../../../../core/client/libs/render-template.js';
+import {destroyAction} from '../../../../../core/client/libs/destroy-action.js';
+import {displaySuccess, displayError} from '../../../../../core/client/libs/display-alert.js';
+import {__} from '../../../../../core/common/libs/tapi18n-callback-helper.js';
 
 // Component
-import '../../../../core/client/components/loading.js';
-import '../../../../core/client/components/column-action.js';
-import '../../../../core/client/components/form-footer.js';
+import '../../../../../core/client/components/loading.js';
+import '../../../../../core/client/components/column-action.js';
+import '../../../../../core/client/components/form-footer.js';
 
 // Collection
-import {Customer} from '../../api/collections/customer.js';
+import {ConfigDep} from '../../../api/collections/configDep';
 
 // Tabular
-import {CustomerTabular} from '../../../common/tabulars/customer.js';
+import {ConfigDepTabular} from '../../../../common/tabulars/configDep';
 
 // Page
-import './customer.html';
+import './configDep.html';
 
 // Declare template
 
@@ -51,12 +51,26 @@ indexTpl.onRendered(function() {
 });
 
 indexTpl.events({
-
   'click .update': function(e, t) {
-    alertify.configDep(fa("pencil", "Dep Rank"),renderTemplate(updateTpl, this));
+    let data = Blaze.getData(event.target);
+    alertify.configDep(fa("pencil", "Dep Rank"),renderTemplate(updateTpl, data));
   },
 });
 
+indexTpl.helpers({
+  tabularTable(){
+    return ConfigDepTabular;
+  },
+  data(){
+    return ConfigDep.findOne({});
+  }
+})
+
+updateTpl.helpers({
+  collection(){
+    return ConfigDep;
+  }
+})
 
 /**
  * Hook

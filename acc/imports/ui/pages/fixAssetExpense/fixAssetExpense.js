@@ -8,58 +8,55 @@ import {lightbox} from 'meteor/theara:lightbox-helpers';
 import {TAPi18n} from 'meteor/tap:i18n';
 import {ReactiveTable} from 'meteor/aslagle:reactive-table';
 import {moment} from 'meteor/momentjs:moment';
-import {DateTimePicker} from 'meteor/tsega:bootstrap3-datetimepicker';
 
 // Lib
-import {createNewAlertify} from '../../../../core/client/libs/create-new-alertify.js';
-import {reactiveTableSettings} from '../../../../core/client/libs/reactive-table-settings.js';
-import {renderTemplate} from '../../../../core/client/libs/render-template.js';
-import {destroyAction} from '../../../../core/client/libs/destroy-action.js';
-import {displaySuccess, displayError} from '../../../../core/client/libs/display-alert.js';
-import {__} from '../../../../core/common/libs/tapi18n-callback-helper.js';
+import {createNewAlertify} from '../../../../../core/client/libs/create-new-alertify.js';
+import {reactiveTableSettings} from '../../../../../core/client/libs/reactive-table-settings.js';
+import {renderTemplate} from '../../../../../core/client/libs/render-template.js';
+import {destroyAction} from '../../../../../core/client/libs/destroy-action.js';
+import {displaySuccess, displayError} from '../../../../../core/client/libs/display-alert.js';
+import {__} from '../../../../../core/common/libs/tapi18n-callback-helper.js';
 
 // Component
-import '../../../../core/client/components/loading.js';
-import '../../../../core/client/components/column-action.js';
-import '../../../../core/client/components/form-footer.js';
+import '../../../../../core/client/components/loading.js';
+import '../../../../../core/client/components/column-action.js';
+import '../../../../../core/client/components/form-footer.js';
+
 
 // Collection
-import {Customer} from '../../api/collections/customer.js';
+import {FixAssetExpense} from '../../../api/collections/fixAssetExpense';
+
 
 // Tabular
-import {CustomerTabular} from '../../../common/tabulars/customer.js';
+import {FixAssetExpenseTabular} from '../../../../common/tabulars/fixAssetExpense';
 
 // Page
-import './customer.html';
+import './fixAssetExpense.html';
 
 // Declare template
 var fixAssetExpenseTpl = Template.acc_fixAssetExpense,
     fixAssetExpenseInsertTpl = Template.acc_fixAssetExpenseInsert;
 fixAssetExpenseTpl.onRendered(function () {
     createNewAlertify("depreciationExpense");
-    // SEO
-    SEO.set({
-        title: 'Depreciation Expense',
-        description: 'Description for this page'
-    });
 })
 
 fixAssetExpenseTpl.helpers({
+    tabularTable(){
+        return FixAssetExpenseTabular;
+    },
     selector: function () {
         return {branchId: Session.get("currentBranch")};
     }
 })
 fixAssetExpenseInsertTpl.onRendered(function () {
-    datePicker();
-    var cur = moment().format("YYYY-MM-DD");
-    $('[name="date"]').val(cur);
-    disableDate();
+    // disableDate();
 })
 
-var datePicker = function () {
-    var dob = $('[name="date"]');
-    DateTimePicker.date(dob);
-};
+fixAssetExpenseInsertTpl.helpers({
+    collection(){
+        return FixAssetExpense;
+    }
+})
 
 
 fixAssetExpenseTpl.events({
@@ -87,11 +84,6 @@ fixAssetExpenseTpl.events({
     }
 });
 
-fixAssetExpenseInsertTpl.events({
-    'click .reset': function (e, t) {
-        $("#dateEndOfProcess").val('');
-    }
-})
 
 /**
  * Hook
@@ -121,7 +113,7 @@ var disableDate = function () {
     var branchId = Session.get("currentBranch");
     selectorGetLastDate.branchId = branchId;
 
-    var dateVal = Acc.Collection.FixAssetExpense.findOne(selectorGetLastDate, {
+    var dateVal = FixAssetExpense.findOne(selectorGetLastDate, {
         sort: {
             date: -1
         }

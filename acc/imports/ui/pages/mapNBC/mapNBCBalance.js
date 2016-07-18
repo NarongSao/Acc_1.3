@@ -8,34 +8,38 @@ import {lightbox} from 'meteor/theara:lightbox-helpers';
 import {TAPi18n} from 'meteor/tap:i18n';
 import {ReactiveTable} from 'meteor/aslagle:reactive-table';
 import {moment} from 'meteor/momentjs:moment';
-import {DateTimePicker} from 'meteor/tsega:bootstrap3-datetimepicker';
 
 // Lib
-import {createNewAlertify} from '../../../../core/client/libs/create-new-alertify.js';
-import {reactiveTableSettings} from '../../../../core/client/libs/reactive-table-settings.js';
-import {renderTemplate} from '../../../../core/client/libs/render-template.js';
-import {destroyAction} from '../../../../core/client/libs/destroy-action.js';
-import {displaySuccess, displayError} from '../../../../core/client/libs/display-alert.js';
-import {__} from '../../../../core/common/libs/tapi18n-callback-helper.js';
+import {createNewAlertify} from '../../../../../core/client/libs/create-new-alertify.js';
+import {reactiveTableSettings} from '../../../../../core/client/libs/reactive-table-settings.js';
+import {renderTemplate} from '../../../../../core/client/libs/render-template.js';
+import {destroyAction} from '../../../../../core/client/libs/destroy-action.js';
+import {displaySuccess, displayError} from '../../../../../core/client/libs/display-alert.js';
+import {__} from '../../../../../core/common/libs/tapi18n-callback-helper.js';
 
 // Component
-import '../../../../core/client/components/loading.js';
-import '../../../../core/client/components/column-action.js';
-import '../../../../core/client/components/form-footer.js';
+import '../../../../../core/client/components/loading.js';
+import '../../../../../core/client/components/column-action.js';
+import '../../../../../core/client/components/form-footer.js';
+
 
 // Collection
-import {Customer} from '../../api/collections/customer.js';
-
+import {MapNBCBalance} from '../../../api/collections/mapNBCBalance';
 // Tabular
-import {CustomerTabular} from '../../../common/tabulars/customer.js';
-
+import {MapNBCBalanceTabular} from '../../../../common/tabulars/mapNBCBalance';
+//Method
+import {SpaceChar} from '../../../../common/configs/space';
 // Page
-import './customer.html';
+import './mapNBCBalance.html';
+import './chartAccountDetail.html';
+import './chartAccountDetail.js';
 
 // Declare template
 var indexTpl = Template.acc_mapNBCBalance,
-  insertTpl = Template.acc_mapNBCBalanceInsert,
   updateTpl = Template.acc_mapNBCBalanceUpdate;
+
+
+var chartAccountDetailCollection = new Mongo.Collection(null);
 
 /**
  * Index
@@ -44,81 +48,56 @@ var indexTpl = Template.acc_mapNBCBalance,
 indexTpl.onRendered(function() {
   /* Create new alertify */
   createNewAlertify("mapBalanceNBC");
-  // SEO
-  SEO.set({
-    title: 'Map Chart Account',
-    description: 'Description for this page'
-  });
 });
 
-
 indexTpl.events({
-
-  'click .insert': function(e, t) {
-
-    itemsState.clear();
-
-    alertify.mapBalanceNBC(fa("plus", "Map NBC Balance"),renderTemplate(insertTpl));
-    /*.maximize();*/
-
-  },
   'click .update': function(e, t) {
-    itemsState.clear();
-    var data = Acc.Collection.MapNBCBalance.findOne(this._id);
-    var doc = Acc.Collection.ChartAccountNBC.findOne(data.chartAccountNBCId)
-    data.name = doc.code + " | " + doc.name;
-    if (!_.isUndefined(data)) {
-      _.each(data.transaction, function(journal, index) {
-        journal.indexAccount = 'transaction.' + index + '.account';
-        itemsState.insert(journal.account, journal);
-      });
-    }
-    alertify.mapBalanceNBC(fa("pencil", "Map NBC Balance"),renderTemplate(updateTpl, data));
-
-  },
-  'click .remove': function(e, t) {
-
-    var id = this._id;
-
-    alertify.confirm("Are you sure to delete [" + id + "]?")
-      .set({
-        onok: function(closeEvent) {
-
-          Acc.Collection.MapNBCBalance.remove(id, function(error) {
-            if (error) {
-              alertify.error(error.message);
-            } else {
-              alertify.success("Success");
-            }
-          });
-        },
-        title: fa("remove", "Map NBC Balance")
-      });
+    var self=this;
+    Session.set('nbcAccountName',self.accountDocNBC.code + " | "+ self.accountDocNBC.name )
+    alertify.mapBalanceNBC(fa("pencil", "Map NBC Balance"),renderTemplate(updateTpl, self));
 
   }
 });
+
+indexTpl.helpers({
+    tabularTable(){
+      return MapNBCBalanceTabular;
+    }
+})
+
+updateTpl.helpers({
+   collection(){
+      return MapNBCBalance;
+   },
+  nbcAccountName(){
+    return Session.get('nbcAccountName');
+  },
+  chartAccountDetailCollection(){
+    return chartAccountDetailCollection;
+  }
+})
+
 
 /**
  * Hook
  */
 AutoForm.hooks({
-  // Customer
-  acc_mapNBCBalanceInsert: {
+  acc_mapNBCBalanceUpdate: {
     before: {
-      insert: function(doc) {
-        doc.branchId = Session.get("currentBranch");
+      update: function(doc) {
+
+        doc.$set.branchId = Session.get("currentBranch");
+        let transactionData = chartAccountDetailCollection.find().fetch();
+
+        var transaction= [];
+        transactionData.forEach(function (obj) {
+          transaction.push({account: obj.chartAccount})
+        });
+        doc.$set.transaction = transaction;
+        doc.$unset={};
         return doc;
       }
     },
-    onSuccess: function(formType, result) {
-      alertify.success('Success');
-      itemsState.clear();
-    },
-    onError: function(formType, error) {
-      alertify.error(error.message);
-    }
-  },
-  acc_mapNBCBalanceUpdate: {
     onSuccess: function(formType, result) {
       alertify.mapBalanceNBC().close();
       alertify.success('Success');

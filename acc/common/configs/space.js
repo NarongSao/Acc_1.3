@@ -6,7 +6,7 @@ export const SpaceChar = {
         var char = '';
         var i=1;
        for(i=1 ;i<=num;i++){
-           char+='&nbsp;';
+           char+='\u00A0';
        }
         return char;
     }

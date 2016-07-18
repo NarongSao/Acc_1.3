@@ -5,7 +5,7 @@ import {ReactiveTable} from 'meteor/aslagle:reactive-table';
 // Collection
 import {Customer} from '../../imports/api/collections/customer.js';
 
-Meteor.publish('acc.customer', function simpleCustomer(selector = {}, options = {}) {
+Meteor.publish('acc.customer', function simpleCustomer(selector , options) {
     this.unblock();
 
     new SimpleSchema({

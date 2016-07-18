@@ -18,8 +18,18 @@ export const DateEndOfProcess = new Mongo.Collection("accDateEndOfProcess");
  */
 DateEndOfProcess.schema = new SimpleSchema({
     closeDate: {
-        type: String,
-        label: "Date"
+        type: Date,
+        label: "Date",
+        defaultValue: moment().toDate(),
+        autoform: {
+            afFieldInput: {
+                type: "bootstrap-datetimepicker",
+                dateTimePickerOptions: {
+                    format: 'DD/MM/YYYY',
+                    showTodayButton: true
+                }
+            }
+        }
     },
     branchId:{
         type: String,

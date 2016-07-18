@@ -21,14 +21,16 @@ Meteor.isClient && require('../../imports/ui/pages/journal/journal.html');
 
 tabularOpts.name = 'acc.journal';
 tabularOpts.collection = Journal;
-tabularOpts.extraFields= ['currencyId','transactionAsset'];
+tabularOpts.extraFields = ['currencyId', 'transactionAsset', 'transaction', 'endId', 'fixAssetExpenseId', 'closingId'];
 tabularOpts.columns = [
     {title: '<i class="fa fa-bars"></i>', tmpl: Meteor.isClient && Template.acc_journalAction},
     {data: "_id", title: "Id"},
-    {data: "journalDate", title: "Journal Date",
-        render: function(val,type,doc){
+    {
+        data: "journalDate", title: "Journal Date",
+        render: function (val, type, doc) {
             return moment(val).format("DD/MM/YYYY");
-        }},
+        }
+    },
     {
         data: "voucherId", title: "Voucher",
         render: function (val, type, doc) {
@@ -36,7 +38,8 @@ tabularOpts.columns = [
         }
     },
     {data: "memo", title: "Description"},
-    {data: "total", title: "Amount",
+    {
+        data: "total", title: "Amount",
         render: function (val, type, doc) {
             if (val != null) {
                 var currencySymbol = Currency.findOne({_id: doc.currencyId}).symbol;

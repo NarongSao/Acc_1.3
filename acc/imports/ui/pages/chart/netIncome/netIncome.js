@@ -69,7 +69,7 @@ indexTpl.events({
             Session.set('chart',result);
         });
     }, 'click #khr': function () {
-        debugger;
+
         let selector = {};
         let year = $("#yearpicker").val();
         selector.year = year;

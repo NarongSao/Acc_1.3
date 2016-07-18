@@ -3,6 +3,8 @@ import {SimpleSchema} from 'meteor/aldeed:simple-schema';
 import {AutoForm} from 'meteor/aldeed:autoform';
 import {moment} from 'meteor/momentjs:moment';
 
+import {SelectOpts} from '../../ui/libs/select-opts';
+
 /**
  * Collection
  *
@@ -22,7 +24,7 @@ MapFixAsset.schema = new SimpleSchema({
         autoform: {
             type: "select2",
             options: function () {
-                return Acc.List.fixAssetList();
+                return SelectOpts.fixAssetList();
             }
         }
     },
@@ -36,7 +38,7 @@ MapFixAsset.schema = new SimpleSchema({
         autoform: {
             type: "select2",
             options: function () {
-                return Acc.List.fixAssetList();
+                return SelectOpts.fixAssetList();
             }
         }
     },
@@ -47,7 +49,7 @@ MapFixAsset.schema = new SimpleSchema({
         autoform: {
             type: "select2",
             options: function () {
-                return Acc.List.fixAssetExpenseList();
+                return SelectOpts.fixAssetExpenseList();
             }
         }
     },

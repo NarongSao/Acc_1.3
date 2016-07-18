@@ -8,29 +8,30 @@ import {lightbox} from 'meteor/theara:lightbox-helpers';
 import {TAPi18n} from 'meteor/tap:i18n';
 import {ReactiveTable} from 'meteor/aslagle:reactive-table';
 import {moment} from 'meteor/momentjs:moment';
-import {DateTimePicker} from 'meteor/tsega:bootstrap3-datetimepicker';
 
 // Lib
-import {createNewAlertify} from '../../../../core/client/libs/create-new-alertify.js';
-import {reactiveTableSettings} from '../../../../core/client/libs/reactive-table-settings.js';
-import {renderTemplate} from '../../../../core/client/libs/render-template.js';
-import {destroyAction} from '../../../../core/client/libs/destroy-action.js';
-import {displaySuccess, displayError} from '../../../../core/client/libs/display-alert.js';
-import {__} from '../../../../core/common/libs/tapi18n-callback-helper.js';
+import {createNewAlertify} from '../../../../../core/client/libs/create-new-alertify.js';
+import {reactiveTableSettings} from '../../../../../core/client/libs/reactive-table-settings.js';
+import {renderTemplate} from '../../../../../core/client/libs/render-template.js';
+import {destroyAction} from '../../../../../core/client/libs/destroy-action.js';
+import {displaySuccess, displayError} from '../../../../../core/client/libs/display-alert.js';
+import {__} from '../../../../../core/common/libs/tapi18n-callback-helper.js';
 
 // Component
-import '../../../../core/client/components/loading.js';
-import '../../../../core/client/components/column-action.js';
-import '../../../../core/client/components/form-footer.js';
+import '../../../../../core/client/components/loading.js';
+import '../../../../../core/client/components/column-action.js';
+import '../../../../../core/client/components/form-footer.js';
+
 
 // Collection
-import {Customer} from '../../api/collections/customer.js';
+import {MapClosing} from '../../../api/collections/mapCLosing';
+
 
 // Tabular
-import {CustomerTabular} from '../../../common/tabulars/customer.js';
+import {MapCLosingTabular} from '../../../../common/tabulars/mapClosing';
 
 // Page
-import './customer.html';
+import './mapCLosing.html';
 
 // Declare template
 var indexTpl = Template.acc_mapClosing,
@@ -40,20 +41,29 @@ var indexTpl = Template.acc_mapClosing,
  * Index
  */
 
+
 indexTpl.onRendered(function() {
   /* Create new alertify */
   createNewAlertify("mapClosing");
-  // SEO
-  SEO.set({
-    title: 'Map Closing',
-    description: 'Description for this page'
-  });
 });
+
+indexTpl.helpers({
+  tabularTable(){
+    return MapCLosingTabular;
+  }
+})
+
+updateTpl.helpers({
+  collection(){
+    return MapClosing;
+  }
+})
+
 
 indexTpl.events({
 
   'click .update': function(e, t) {
-    var data = Acc.Collection.MapClosing.findOne(this._id);
+    let data=this;
     alertify.mapClosing(fa("pencil", "Map Closing"),renderTemplate(updateTpl, data));
   },
 });
@@ -64,6 +74,8 @@ updateTpl.events({
     evt.preventDefault();
   }
 });
+
+
 
 
 /**

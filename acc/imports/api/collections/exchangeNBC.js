@@ -33,12 +33,18 @@ var Rates = new SimpleSchema({
 
 ExchangeNBC.schema = new SimpleSchema({
     dateTime: {
-        type: String,
-        label: "Date",
         unique: true,
-        defaultValue: function () {
-            var currentDate = moment(ReactiveMethod.call("currentDate"), 'YYYY-MM-DD H:mm:ss').format('YYYY-MM-DD H:mm:ss');
-            return currentDate;
+        type: Date,
+        label: "Journal Date",
+        defaultValue: moment().toDate(),
+        autoform: {
+            afFieldInput: {
+                type: "bootstrap-datetimepicker",
+                dateTimePickerOptions: {
+                    format: 'DD/MM/YYYY',
+                    showTodayButton: true
+                }
+            }
         }
     },
     base: {

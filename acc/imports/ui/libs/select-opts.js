@@ -66,8 +66,8 @@ export const SelectOpts = {
         })
         return typeArr;
     }, fixAssetChatAccount: function () {
-        Meteor.subscribe('acc.chartAccount');
-        var listChartAccount = [];
+        Meteor.subscribe('accChartAccount');
+        var listChartAccount = [{label: "(Select One)", value: ""}];
         ChartAccount.find({accountTypeId: '11'}, {sort: {code: 1}})
             .forEach(function (obj) {
                 listChartAccount.push({
@@ -77,8 +77,7 @@ export const SelectOpts = {
             });
         return listChartAccount;
     }, fixAssetList: function () {
-        Meteor.subscribe('acc.chartAccount');
-
+        Meteor.subscribe('accChartAccount');
         var listChartAccount = [{label: "(Select One)", value: ""}];
         ChartAccount.find({accountTypeId: '11'}, {sort: {code: 1}})
             .forEach(function (obj) {
@@ -89,7 +88,7 @@ export const SelectOpts = {
             });
         return listChartAccount;
     },fixAssetExpenseList: function () {
-        Meteor.subscribe('acc.chartAccount');
+        Meteor.subscribe('accChartAccount');
 
         var listChartAccount = [{label: "(Select One)", value: ""}];
         ChartAccount.find({accountTypeId: '50'}, {sort: {code: 1}})
@@ -102,8 +101,8 @@ export const SelectOpts = {
         return listChartAccount;
     },
     parent: function (selector) {
-        Meteor.subscribe('acc.chartAccount');
-        Meteor.subscribe('acc.accountType');
+        Meteor.subscribe('accChartAccount');
+        Meteor.subscribe('accAccountType');
 
         var selector = _.isUndefined(selector) ? {} : selector;
         var list = [{label: "(Select One)", value: ""}];
@@ -118,7 +117,7 @@ export const SelectOpts = {
         return list;
     },
     accountType: function (selector) {
-        Meteor.subscribe('acc.accountType');
+        Meteor.subscribe('accAccountType');
         var selector = _.isUndefined(selector) ? {} : selector;
         var list = [{label: "(Select One)", value: ""}];
         AccountType.find(selector)
@@ -129,21 +128,20 @@ export const SelectOpts = {
         //}
     },
     chartAccountId: function (selector) {
-        Meteor.subscribe('acc.chartAccount');
+        Meteor.subscribe('accChartAccount');
 
         var selector = _.isUndefined(selector) ? {} : selector;
         var list = [{label: "(Select One)", value: ""}];
         ChartAccount.find(selector, {sort: {code: 1}})
             .forEach(function (obj) {
-                var accountType = AccountType.findOne(obj.accountTypeId).name;
                 list.push({
-                    label: Spacebars.SafeString(SpaceChar.space(obj.level * 6) + obj.code + " | " + obj.name + " | " + accountType),
+                    label: Spacebars.SafeString(SpaceChar.space(obj.level * 6) + obj.code + " | " + obj.name),
                     value: obj._id
                 })
             });
         return list;
     }, chartAccountNBC: function (selector) {
-        Meteor.subscribe('acc.chartAccountNBC');
+        Meteor.subscribe('accChartAccountNBC');
 
         var selector = _.isUndefined(selector) ? {} : selector;
         var list = [{label: "(Select One)", value: ""}];
@@ -156,7 +154,7 @@ export const SelectOpts = {
             });
         return list;
     }, chartAccountNBCKH: function (selector) {
-        Meteor.subscribe('acc.chartAccountNBCKH');
+        Meteor.subscribe('accChartAccountNBCKH');
 
         var selector = _.isUndefined(selector) ? {} : selector;
         var list = [{label: "(Select One)", value: ""}];
@@ -168,10 +166,19 @@ export const SelectOpts = {
                 })
             });
         return list;
+    },chartAccount: function () {
+        var list = [{label: "(Select One)", value: ""}];
+        ChartAccount.find({}, {sort: {code: 1}})
+            .forEach(function (obj) {
+                list.push({
+                    label:  Spacebars.SafeString(SpaceChar.space(obj.level * 6) +obj.code).string+ " | " + obj.name,
+                    value: Spacebars.SafeString(SpaceChar.space(obj.level * 6) +obj.code).string+" | "+obj.name
+                })
+            });
+        return list;
     },
     currency: function (selectAll) {
-        Meteor.subscribe('acc.currency');
-
+        Meteor.subscribe('accCurrency');
         var list = [];
         if (!_.isEqual(selectAll, false)) {
             list.push({label: "(Select All)", value: "All"});
@@ -187,7 +194,7 @@ export const SelectOpts = {
     }
     ,
     currencyClosing: function () {
-        Meteor.subscribe('acc.currency');
+        Meteor.subscribe('accCurrency');
         Meteor.subscribe('core.setting');
 
         var list = [];
@@ -222,3 +229,4 @@ export const SelectOpts = {
         ];
     }
 };
+
